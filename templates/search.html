@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Поиск</h1>
+    {% if query %}
+        <p>Запрос: <strong>{{ query }}</strong></p>
+    {% endif %}
+</section>
+
+<div class="results-header">
+    <h2>Результаты</h2>
+    <span class="count">Найдено: {{ results|length }}</span>
+</div>
+
+{% if results %}
+    <div class="article-list">
+        {% for article in results %}
+            <article class="article-item">
+                <h3>
+                    <a href="{{ url_for('article_view', article_id=article.id) }}">
+                        {{ article.title }}
+                    </a>
+                </h3>
+
+                <div class="meta">
+                    <span><strong>Вкладка:</strong> {{ article.bucket }}</span>
+                    <span><strong>Категория:</strong> {{ article.category or "—" }}</span>
+                    <span><strong>Подкатегория:</strong> {{ article.subcategory or "—" }}</span>
+                </div>
+
+                <p class="abstract">
+                    {{ (article.abstract or "")[:350] }}{% if article.abstract and article.abstract|length > 350 %}...{% endif %}
+                </p>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Ничего не найдено.</p>
+{% endif %}
+{% endblock %}

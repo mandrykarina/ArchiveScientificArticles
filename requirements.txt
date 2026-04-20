@@ -1,0 +1,16 @@
+torch --index-url https://download.pytorch.org/whl/cpu
+transformers
+yake
+tqdm
+requests
+beautifulsoup4
+lxml
+arxiv
+sentencepiece
+sacremoses
+langdetect
+sqlalchemy
+streamlit
+Flask
+pymorphy3
+

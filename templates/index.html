@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>База научных статей</h1>
+
+    <div class="cards">
+        <div class="card">
+            <a class="card-main-link" href="{{ url_for('bucket_view', bucket='rus') }}">
+                <h2>Rus</h2>
+            </a>
+            <p>
+                Статьи из
+                <a
+                    class="external-service-link"
+                    href="https://cyberleninka.ru"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    cyberleninka.ru
+                </a>
+            </p>
+        </div>
+
+        <div class="card">
+            <a class="card-main-link" href="{{ url_for('bucket_view', bucket='eng') }}">
+                <h2>Eng</h2>
+            </a>
+            <p>
+                Статьи из
+                <a
+                    class="external-service-link"
+                    href="https://arxiv.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    arxiv.org
+                </a>
+            </p>
+        </div>
+
+        <div class="card">
+            <a class="card-main-link" href="{{ url_for('bucket_view', bucket='chn') }}">
+                <h2>Chn</h2>
+            </a>
+            <p>
+                Статьи из
+                <a
+                    class="external-service-link"
+                    href="https://chinaxiv.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    chinaxiv.org
+                </a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

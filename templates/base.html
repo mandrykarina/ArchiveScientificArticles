@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}База научных статей{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="container topbar-inner">
+            <a class="logo" href="{{ url_for('index') }}">База научных статей</a>
+
+            <nav class="nav">
+                <a href="{{ url_for('bucket_view', bucket='rus') }}">Rus</a>
+                <a href="{{ url_for('bucket_view', bucket='eng') }}">Eng</a>
+                <a href="{{ url_for('bucket_view', bucket='chn') }}">Chn</a>
+            </nav>
+
+            <form class="search-form" action="{{ url_for('search_view') }}" method="get">
+                <input
+                    class="search-input"
+                    type="text"
+                    name="q"
+                    placeholder="Поиск по названию, автору, ключевым словам"
+                >
+                <select name="bucket">
+                    <option value="">Все</option>
+                    <option value="rus">Rus</option>
+                    <option value="eng">Eng</option>
+                    <option value="chn">Chn</option>
+                </select>
+                <button type="submit">Найти</button>
+                <a class="reset-button" href="{{ url_for('search_view') }}">Сбросить</a>
+            </form>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

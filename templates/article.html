@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<article class="article-page">
+    <h1>{{ article.title }}</h1>
+
+    <div class="meta-grid">
+        <div><strong>Источник:</strong> {{ article.source }}</div>
+        <div><strong>Вкладка:</strong> {{ article.bucket }}</div>
+
+        <div>
+            <strong>Категория:</strong>
+            {% if article.category %}
+                <a
+                    class="meta-link"
+                    href="{{ url_for('bucket_view', bucket=article.bucket, category=article.category) }}"
+                    title="Открыть категорию {{ article.category }}"
+                >
+                    {{ article.category }}
+                </a>
+            {% else %}
+                —
+            {% endif %}
+        </div>
+
+        <div>
+            <strong>Подкатегория:</strong>
+            {% if article.subcategory %}
+                <a
+                    class="meta-link"
+                    href="{{ url_for('bucket_view', bucket=article.bucket, category=article.category, subcategory=article.subcategory) }}"
+                    title="Открыть подкатегорию {{ article.subcategory }}"
+                >
+                    {{ article.subcategory }}
+                </a>
+            {% else %}
+                —
+            {% endif %}
+        </div>
+
+        <div><strong>DOI:</strong> {{ article.doi or "—" }}</div>
+        <div><strong>Дата публикации:</strong> {{ article.published_at or "—" }}</div>
+    </div>
+
+    <section class="article-block">
+        <h2>Авторы</h2>
+        {% if authors %}
+            <ul class="author-list">
+                {% for author in authors %}
+                    <li>
+                        <a
+                            class="meta-link"
+                            href="{{ url_for('search_view', q=author, bucket=article.bucket) }}"
+                            title="Искать статьи автора {{ author }}"
+                        >
+                            {{ author }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Нет данных.</p>
+        {% endif %}
+    </section>
+
+    <section class="article-block">
+        <h2>Аннотация</h2>
+        <p>{{ article.abstract or "Нет аннотации." }}</p>
+    </section>
+
+    <section class="article-block">
+        <h2>Ключевые слова</h2>
+        {% if keywords %}
+            <div class="tags">
+                {% for keyword in keywords %}
+                    <a
+                        class="tag tag-link"
+                        href="{{ url_for('search_view', q=keyword, bucket=article.bucket) }}"
+                        title="Искать по ключевому слову: {{ keyword }}"
+                    >
+                        {{ keyword }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Нет ключевых слов.</p>
+        {% endif %}
+    </section>
+
+    <section class="article-block links">
+        <h2>Ссылки</h2>
+        {% if article.url %}
+            <p><a href="{{ article.url }}" target="_blank">Открыть статью</a></p>
+        {% endif %}
+        {% if article.pdf_url %}
+            <p><a href="{{ article.pdf_url }}" target="_blank">Открыть PDF</a></p>
+        {% endif %}
+        {% if not article.url and not article.pdf_url %}
+            <p>Нет внешних ссылок.</p>
+        {% endif %}
+    </section>
+</article>
+{% endblock %}

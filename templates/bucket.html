@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bucket_title }}{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Вкладка {{ bucket_title }}</h1>
+</section>
+
+<div class="layout">
+    <aside class="sidebar">
+        <form id="filterForm" method="get" action="{{ url_for('bucket_view', bucket=bucket) }}">
+            <div class="filter-group">
+                <label for="category">Категория</label>
+                <select id="category" name="category">
+                    <option value="">Все категории</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>
+                            {{ cat }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="subcategory">Подкатегория</label>
+                <select id="subcategory" name="subcategory" {% if not selected_category %}disabled{% endif %}>
+                    <option value="">Все подкатегории</option>
+                    {% for subcat in subcategories %}
+                        <option value="{{ subcat }}" {% if subcat == selected_subcategory %}selected{% endif %}>
+                            {{ subcat }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if local_query %}
+                <input type="hidden" name="local_q" value="{{ local_query }}">
+            {% endif %}
+
+            <button type="submit">Применить</button>
+        </form>
+
+        <hr class="sidebar-divider">
+
+        <form method="get" action="{{ url_for('bucket_view', bucket=bucket) }}" class="local-search-form">
+            <div class="filter-group">
+                <label for="local_q">Поиск в текущем разделе</label>
+                <input
+                    id="local_q"
+                    class="sidebar-search-input"
+                    type="text"
+                    name="local_q"
+                    value="{{ local_query or '' }}"
+                    placeholder="Поиск внутри текущего раздела"
+                >
+            </div>
+
+            {% if selected_category %}
+                <input type="hidden" name="category" value="{{ selected_category }}">
+            {% endif %}
+
+            {% if selected_subcategory %}
+                <input type="hidden" name="subcategory" value="{{ selected_subcategory }}">
+            {% endif %}
+
+            <div class="form-actions">
+                <button type="submit">Найти</button>
+                <a
+                    class="reset-button"
+                    href="{{ url_for('bucket_view', bucket=bucket, category=selected_category or None, subcategory=selected_subcategory or None) }}"
+                >
+                    Сбросить
+                </a>
+            </div>
+        </form>
+    </aside>
+
+    <section class="content">
+        <div class="results-header">
+            <h2>Статьи</h2>
+            <span class="count">Найдено: {{ articles|length }}</span>
+        </div>
+
+        {% if articles %}
+            <div class="article-list">
+                {% for article in articles %}
+    <a class="article-card-link" href="{{ url_for('article_view', article_id=article.id) }}">
+        <article class="article-item">
+            <h3>{{ article.title }}</h3>
+
+            <div class="meta">
+                <span><strong>Категория:</strong> {{ article.category or "—" }}</span>
+                <span><strong>Подкатегория:</strong> {{ article.subcategory or "—" }}</span>
+            </div>
+
+            <p class="abstract">
+                {{ (article.abstract or "")[:350] }}{% if article.abstract and article.abstract|length > 350 %}...{% endif %}
+            </p>
+        </article>
+    </a>
+{% endfor %}
+            </div>
+        {% else %}
+            <p>Статьи не найдены.</p>
+        {% endif %}
+    </section>
+</div>
+
+<script>
+    const form = document.getElementById("filterForm");
+    const categorySelect = document.getElementById("category");
+    const subcategorySelect = document.getElementById("subcategory");
+
+    categorySelect.addEventListener("change", function () {
+        if (subcategorySelect) {
+            subcategorySelect.value = "";
+        }
+        form.submit();
+    });
+
+    subcategorySelect.addEventListener("change", function () {
+        form.submit();
+    });
+</script>
+{% endblock %}
