@@ -59,7 +59,6 @@
 ## Скриншоты сайта
 
 ### Главная страница
-![Главная страница](images/main-page.png)
 
 <img width="1918" height="964" alt="image_2026-04-22_15-36-58" src="https://github.com/user-attachments/assets/30fe27e4-b0c3-4da7-85ca-ddfd4c6a13d9" />
 
